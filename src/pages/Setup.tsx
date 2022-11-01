@@ -1,6 +1,6 @@
 import { AddIcon, ArrowBackIcon } from "@chakra-ui/icons";
-import { Flex, Heading, VStack } from "@chakra-ui/react";
-import React from "react";
+import { Flex, Heading, VStack, Text, Box, useDisclosure } from "@chakra-ui/react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/Button";
 import { IconButton } from "../components/IconButton";
@@ -11,6 +11,11 @@ import { usePlayers } from "../hooks/usePlayers";
 export function Setup() {
   const navigate = useNavigate();
   const [players, setPlayers] = usePlayers();
+  const {
+    isOpen: isSettingsOpen,
+    onOpen: onSettingsOpen,
+    onClose: onSettingsClose,
+  } = useDisclosure();
 
   function handleClickBack() {
     navigate("/");
@@ -29,16 +34,21 @@ export function Setup() {
   }
 
   function handleRemovePlayer(index: number) {
-    if (players.length <= 1) return;
-    setPlayers((players) => {
-      const newPlayers = [...players];
-      newPlayers.splice(index, 1);
-      return newPlayers;
-    });
+    console.log(players.length);
+    if (players.length === 1) {
+      setPlayers([""]);
+    } else {
+      setPlayers((players) => {
+        const newPlayers = [...players];
+        newPlayers.splice(index, 1);
+        return newPlayers;
+      });
+    }
   }
 
   function handleRemoveAll() {
     setPlayers([""]);
+    onSettingsClose();
   }
 
   function handleStartGame() {
@@ -59,7 +69,14 @@ export function Setup() {
           opacity="0.6"
           icon={<ArrowBackIcon fontSize="2xl" />}
         />
-        <Settings onRemoveAll={handleRemoveAll} />
+        <Flex position="absolute" right={4}>
+          <Settings isOpen={isSettingsOpen} onOpen={onSettingsOpen} onClose={onSettingsClose}>
+            <Flex align="center" justify="space-between">
+              <Text>Remove all players</Text>
+              <Button onClick={handleRemoveAll}>Remove All</Button>
+            </Flex>
+          </Settings>
+        </Flex>
       </Flex>
       <Flex
         mt={6}
@@ -78,7 +95,6 @@ export function Setup() {
               key={i}
               player={player}
               index={i}
-              isRemoveDisabled={players.length === 1}
               onChange={handleChangePlayerName}
               onRemove={handleRemovePlayer}
             />
@@ -101,6 +117,7 @@ export function Setup() {
           Start Game
         </Button>
       </Flex>
+      <Box h={100}></Box>
     </Flex>
   );
 }

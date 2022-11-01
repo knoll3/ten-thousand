@@ -1,8 +1,5 @@
-import { SettingsIcon } from "@chakra-ui/icons";
 import {
   Divider,
-  Flex,
-  IconButton,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,34 +7,23 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import { Button } from "./Button";
 
-interface SettingsProps {
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
+interface ConfirmModalProps {
+  title: string;
   children: React.ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
 }
-
-export function Settings({ isOpen, onOpen, onClose, children }: SettingsProps) {
+export function ConfirmModal({ title, isOpen, onClose, children }: ConfirmModalProps) {
   return (
     <React.Fragment>
-      <IconButton
-        onClick={onOpen}
-        aria-label="Settings"
-        bg="none"
-        size="md"
-        opacity="0.6"
-        icon={<SettingsIcon />}
-      />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.600" color="gray.300" mx={3}>
-          <ModalHeader textAlign="center">Settings</ModalHeader>
+          <ModalHeader textAlign="center">{title}</ModalHeader>
           <ModalCloseButton />
           <Divider mb={3} borderColor="gray.500" />
           <ModalBody my={3}>{children}</ModalBody>
