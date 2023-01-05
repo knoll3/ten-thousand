@@ -44,6 +44,7 @@ export function Game() {
     setRound(0);
     setBoardScore(0);
     setInputValue("0");
+    setTurn(0);
     onSettingsClose();
   }
 
